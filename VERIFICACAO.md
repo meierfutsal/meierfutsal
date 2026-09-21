@@ -1,15 +1,8 @@
-# Verificação da exportação
+# Verificação rápida
 
-Validação local realizada em 21/09/2026:
-
-- Verificação TypeScript concluída sem erros.
-- Build de produção do Vinext para Cloudflare Workers concluído.
-- Migração inicial aplicada em D1 local.
-- 14 testes da validação de tokens Access aprovados.
-- 40 verificações das regras da API aprovadas, com banco SQLite e armazenamento simulados.
-- 9 verificações HTTP no Worker local aprovadas: página, imagem, API pública, bloqueio do admin e uploads, rejeição de cabeçalhos falsos, solicitação de visita e rejeição de origem cruzada.
-- Verificador de publicação impediu o uso do database_id de exemplo.
-
-A publicação e o login real na conta Cloudflare do destinatário dependem das
-configurações descritas no guia e devem ser conferidos após o deploy.
-Os bancos e registros usados nos testes não fazem parte do ZIP.
+1. O deploy deve concluir com Build e Deploy verdes.
+2. A home deve abrir normalmente.
+3. `/admin` no primeiro acesso deve mostrar "Criar acesso administrador".
+4. Depois do cadastro, o painel deve abrir com dashboard, alunos, financeiro, turmas, visitas, inscrições, avaliações, edição do site e configurações.
+5. Logout deve voltar para a tela de login.
+6. Uploads feitos no editor devem continuar usando o bucket R2 `meier-futsal-imagens`.

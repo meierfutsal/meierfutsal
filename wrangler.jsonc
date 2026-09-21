@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "meier-futsal",
+  "name": "meierfutsal",
   "main": "vinext/server/fetch-handler",
   "compatibility_date": "2026-05-15",
   "compatibility_flags": [
@@ -24,9 +24,5 @@
       "binding": "BUCKET",
       "bucket_name": "meier-futsal-imagens"
     }
-  ],
-  "vars": {
-    "CF_ACCESS_TEAM_DOMAIN": "",
-    "CF_ACCESS_AUD": ""
-  }
+  ]
 }

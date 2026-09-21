@@ -1,18 +1,35 @@
-MÉIER FUTSAL — ARQUIVOS DO SITE
+MÉIER FUTSAL — VERSÃO ADMIN SIMPLIFICADA
 
-1. Extraia este ZIP.
-2. Abra GUIA_GITHUB_CLOUDFLARE.md e siga as etapas na ordem.
-3. Envie o conteúdo da pasta extraída para a raiz do seu repositório GitHub.
-4. Publique como Cloudflare Worker, com D1 (banco) e R2 (imagens).
+Esta versão mantém o site público e a infraestrutura já configurada na Cloudflare.
 
-O site inclui o painel administrativo, as fotos fornecidas e o código completo.
-O login do admin foi adaptado para Cloudflare Access. Para manter o site público
-com o painel protegido, o guia usa um domínio próprio ativo na Cloudflare.
+Cloudflare já configurado:
+- Worker: meierfutsal
+- D1: meier-futsal-db
+- R2: meier-futsal-imagens
+- Database ID: 9532ce8f-0dda-4103-a694-44262a1a2ff2
 
-É preciso criar os recursos na SUA conta e preencher a configuração.
-O pacote não contém senhas, tokens, contas de demonstração ou dados de alunos.
-Não é uma publicação estática: GitHub Pages e upload simples no Pages não
-executam o banco, os formulários ou o painel.
+O painel /admin NÃO usa mais Cloudflare Access / Zero Trust.
 
-O GitHub guarda o código; a Cloudflare executa o site e guarda os dados.
-Comece pelo guia. O arquivo README.md descreve o que está incluído.
+PRIMEIRO ACESSO AO ADMIN:
+1. Publique estes arquivos no GitHub.
+2. Aguarde o deploy automático da Cloudflare ficar verde.
+3. Abra: https://meierfutsal.eucaiocavalcante4.workers.dev/admin
+4. Na primeira vez, crie o e-mail e a senha do administrador.
+5. Depois disso, o mesmo endereço passa a exibir a tela normal de login.
+
+O painel inclui:
+- Visão geral com alunos ativos, recebido, atraso e a vencer
+- Cadastro e edição de alunos
+- Turmas e lista de presença
+- Financeiro, mensalidades, pagamentos parciais, despesas e recibos
+- Geração mensal de mensalidades
+- Agenda de visitas
+- Fichas de inscrição
+- Avaliações com aprovação
+- Edição completa do site, textos e imagens
+- Upload de imagens para R2
+- Backup JSON e exportações CSV
+- Alteração de senha do administrador
+
+IMPORTANTE:
+Não precisa criar outro D1, outro R2 ou configurar Cloudflare Access.
