@@ -1,12 +1,12 @@
 import {env} from 'cloudflare:workers';
 import {getAdminIdentity} from '@/lib/auth';
 import {defaultContent,Item} from './content';
-export function bindings(){return env as unknown as {DB:D1Database;BUCKET:R2Bucket;ADMIN_OWNER_EMAIL?:string};}
+export function bindings(){return env as unknown as {DB:D1Database;BUCKET:R2Bucket};}
 export function db(){const d=bindings().DB;if(!d)throw new Error('Serviço de dados indisponível. Tente novamente.');return d;}
 export const reply=(data:unknown,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
 export function fail(e:unknown){console.error(e);return reply({error:e instanceof Error?e.message:'Não foi possível concluir. Tente novamente.'},(e as any)?.status||500);}
 export function problem(message:string,status=400):never{throw Object.assign(new Error(message),{status});}
-export async function admin(){const user=await getAdminIdentity();if(!user)problem('Entre na sua conta para continuar.',401);const email=user.email.toLowerCase();const owner=bindings().ADMIN_OWNER_EMAIL?.trim().toLowerCase();const allowed=owner===email||await db().prepare('SELECT email FROM admins WHERE email=?').bind(email).first();if(!allowed)problem('Sua conta não tem acesso à administração.',403);return {...user,owner:email===owner};}
+export async function admin(){const user=await getAdminIdentity();if(!user)problem('Entre no painel para continuar.',401);return user;}
 export function sameOrigin(req:Request){const origin=req.headers.get('origin');if(origin&&origin!==new URL(req.url).origin)problem('Origem não autorizada.',403);if(req.headers.get('sec-fetch-site')==='cross-site')problem('Origem não autorizada.',403);}
 export function decode(row:any):Item{return {...row,data:JSON.parse(row.data)};}
 export async function all(kind?:string){const r=kind?await db().prepare('SELECT * FROM records WHERE kind=? ORDER BY created_at DESC').bind(kind).all():await db().prepare('SELECT * FROM records ORDER BY created_at DESC').all();return r.results.map(decode);}
