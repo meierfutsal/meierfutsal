@@ -14,7 +14,7 @@ function db(){const d=bindings().DB;if(!d)throw new Error('Banco de dados indisp
 function hex(bytes:ArrayBuffer|Uint8Array){return Array.from(bytes instanceof Uint8Array?bytes:new Uint8Array(bytes)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 function randomHex(bytes=24){const b=new Uint8Array(bytes);crypto.getRandomValues(b);return hex(b);}
 async function sha256(value:string){return hex(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value)));}
-async function derive(password:string,salt:string,iterations=160000){
+async function derive(password:string,salt:string,iterations=100000){
  const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);
  return hex(await crypto.subtle.deriveBits({name:'PBKDF2',hash:'SHA-256',salt:new TextEncoder().encode(salt),iterations},key,256));
 }
@@ -27,21 +27,21 @@ export async function createAdminAccount(email:string,name:string,password:strin
  const cleanEmail=email.trim().toLowerCase();const cleanName=name.trim()||'Administrador';
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail))throw Object.assign(new Error('Informe um e-mail válido.'),{status:400});
  if(password.length<8)throw Object.assign(new Error('A senha precisa ter pelo menos 8 caracteres.'),{status:400});
- const salt=randomHex(18),iterations=160000,hash=await derive(password,salt,iterations);
+ const salt=randomHex(18),iterations=100000,hash=await derive(password,salt,iterations);
  await putRecord(AUTH_ID,'admin_auth',{email:cleanEmail,name:cleanName,salt,hash,iterations} satisfies AuthConfig);
  return createSession(cleanEmail,cleanName);
 }
 export async function authenticate(email:string,password:string){
  const cfg=await getRecord(AUTH_ID) as AuthConfig|null;if(!cfg)return null;
  const clean=email.trim().toLowerCase();if(clean!==cfg.email)return null;
- const hash=await derive(password,cfg.salt,cfg.iterations||160000);if(hash!==cfg.hash)return null;
+ const hash=await derive(password,cfg.salt,cfg.iterations||100000);if(hash!==cfg.hash)return null;
  return createSession(cfg.email,cfg.name||'Administrador');
 }
 export async function changePassword(current:string,next:string){
  const cfg=await getRecord(AUTH_ID) as AuthConfig|null;if(!cfg)throw Object.assign(new Error('Administrador não configurado.'),{status:404});
- const currentHash=await derive(current,cfg.salt,cfg.iterations||160000);if(currentHash!==cfg.hash)throw Object.assign(new Error('Senha atual incorreta.'),{status:401});
+ const currentHash=await derive(current,cfg.salt,cfg.iterations||100000);if(currentHash!==cfg.hash)throw Object.assign(new Error('Senha atual incorreta.'),{status:401});
  if(next.length<8)throw Object.assign(new Error('A nova senha precisa ter pelo menos 8 caracteres.'),{status:400});
- const salt=randomHex(18),iterations=160000,hash=await derive(next,salt,iterations);await putRecord(AUTH_ID,'admin_auth',{...cfg,salt,hash,iterations});
+ const salt=randomHex(18),iterations=100000,hash=await derive(next,salt,iterations);await putRecord(AUTH_ID,'admin_auth',{...cfg,salt,hash,iterations});
  await db().prepare("DELETE FROM records WHERE kind='admin_session'").run();
 }
 async function createSession(email:string,name:string){
