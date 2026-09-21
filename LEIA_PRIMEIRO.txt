@@ -1,0 +1,18 @@
+MÉIER FUTSAL — ARQUIVOS DO SITE
+
+1. Extraia este ZIP.
+2. Abra GUIA_GITHUB_CLOUDFLARE.md e siga as etapas na ordem.
+3. Envie o conteúdo da pasta extraída para a raiz do seu repositório GitHub.
+4. Publique como Cloudflare Worker, com D1 (banco) e R2 (imagens).
+
+O site inclui o painel administrativo, as fotos fornecidas e o código completo.
+O login do admin foi adaptado para Cloudflare Access. Para manter o site público
+com o painel protegido, o guia usa um domínio próprio ativo na Cloudflare.
+
+É preciso criar os recursos na SUA conta e preencher a configuração.
+O pacote não contém senhas, tokens, contas de demonstração ou dados de alunos.
+Não é uma publicação estática: GitHub Pages e upload simples no Pages não
+executam o banco, os formulários ou o painel.
+
+O GitHub guarda o código; a Cloudflare executa o site e guarda os dados.
+Comece pelo guia. O arquivo README.md descreve o que está incluído.

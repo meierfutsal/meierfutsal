@@ -1,0 +1,2 @@
+import {admin,fail,problem,reply,sameOrigin,saveImage} from '@/lib/server';
+export async function POST(req:Request){try{sameOrigin(req);await admin();if(Number(req.headers.get('content-length'))>6*1024*1024)problem('Imagem muito grande.',413);const f=await req.formData();const file=f.get('file');if(!(file instanceof File))problem('Selecione uma imagem.');return reply({url:await saveImage(file)});}catch(e){return fail(e);}}
